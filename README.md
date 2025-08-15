@@ -2,6 +2,10 @@
 
 API simples em Node.js + TypeScript usando Fastify, Drizzle ORM (PostgreSQL) e Zod. Inclui documentação Swagger/Scalar em ambiente de desenvolvimento.
 
+## Hospedagem
+A API está hospedada no [Fly.io](https://fly.io) com banco de dados PostgreSQL no [Neon](https://neon.tech/).
+- URL da API: [https://api-node-learning.fly.dev/courses](https://api-node-learning.fly.dev/courses)
+
 ## Requisitos
 - Node.js 22+
 - Docker e Docker Compose
@@ -48,6 +52,7 @@ npm run dev
 - Porta padrão: `http://localhost:3333`
 - Logs legíveis habilitados
 - Documentação da API (em dev): `http://localhost:3333/docs`
+- Versão em produção: `https://api-node-learning.fly.dev`
 
 ## Endpoints
 Base URL: `http://localhost:3333`
@@ -127,11 +132,41 @@ sequenceDiagram
 - `npm run db:generate`: gera artefatos do Drizzle a partir do schema
 - `npm run db:migrate`: aplica migrações no banco
 - `npm run db:studio`: abre o Drizzle Studio
+- `npm test`: executa os testes com Vitest
+- `npm run db:seed`: popula o banco com dados iniciais de teste
 
 ## Dicas e solução de problemas
 - Conexão recusada ao Postgres: confirme `docker compose up -d` e que a porta `5432` não está em uso.
 - Variável `DATABASE_URL` ausente: verifique seu `.env`. O Drizzle exige essa variável para `db:generate`, `db:migrate` e `db:studio`.
 - Docs não aparecem em `/docs`: garanta `NODE_ENV=development` no `.env` e reinicie o servidor.
+
+## Deploy
+
+### Fly.io
+O projeto está configurado para deploy no Fly.io através do arquivo `fly.toml` e `Dockerfile`. O deploy executa automaticamente as migrações do banco de dados antes de iniciar o serviço.
+
+```bash
+# Instalar a CLI do Fly.io
+curl -L https://fly.io/install.sh | sh
+
+# Login (se necessário)
+fly auth login
+
+# Deploy da aplicação
+fly deploy
+```
+
+### Banco de dados
+O banco de dados PostgreSQL está hospedado no Neon, um serviço de banco de dados serverless compatível com PostgreSQL.
+
+Para configurar o banco em produção:
+1. Crie uma conta no [Neon](https://neon.tech/)
+2. Crie um projeto PostgreSQL
+3. Obtenha a string de conexão
+4. Configure a variável `DATABASE_URL` no Fly.io:
+```bash
+fly secrets set DATABASE_URL="sua_string_de_conexao_neon"
+```
 
 ## Licença
 ISC (ver `package.json`).
