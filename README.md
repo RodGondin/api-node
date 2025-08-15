@@ -145,28 +145,8 @@ sequenceDiagram
 ### Fly.io
 O projeto está configurado para deploy no Fly.io através do arquivo `fly.toml` e `Dockerfile`. O deploy executa automaticamente as migrações do banco de dados antes de iniciar o serviço.
 
-```bash
-# Instalar a CLI do Fly.io
-curl -L https://fly.io/install.sh | sh
-
-# Login (se necessário)
-fly auth login
-
-# Deploy da aplicação
-fly deploy
-```
-
 ### Banco de dados
 O banco de dados PostgreSQL está hospedado no Neon, um serviço de banco de dados serverless compatível com PostgreSQL.
-
-Para configurar o banco em produção:
-1. Crie uma conta no [Neon](https://neon.tech/)
-2. Crie um projeto PostgreSQL
-3. Obtenha a string de conexão
-4. Configure a variável `DATABASE_URL` no Fly.io:
-```bash
-fly secrets set DATABASE_URL="sua_string_de_conexao_neon"
-```
 
 ## Licença
 ISC (ver `package.json`).
